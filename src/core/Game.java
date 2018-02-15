@@ -375,34 +375,78 @@ public class Game implements Serializable
 
 	private static final String NEW_LINE = String.format("%n");
 
-	private static String printMaps(int[][] map, int[][] enemyMap)
+	public static void main(String[] args)
 	{
+		int size = 25;
 		StringBuilder sb = new StringBuilder();
+		int levelCount = (int)Math.log10(size);
+		System.out.println("levelCount = " + Math.log10(size));
+		System.out.println("levelCount = " + levelCount);
+		for(int level = levelCount; level >= 0; level--)
+		{
+			addHeaderNumbers(sb, level, size);
+			sb.append(NEW_LINE);
+		}
+		System.out.println(sb.toString());
+	}
+
+	private static void addHeaderNumbers(StringBuilder sb, int level, int size)
+	{
+		double levelDivider = Math.pow(10, level);
+		int levelSpaceCount = (int)(levelDivider - 1);
+		if(level > 0)
+			levelSpaceCount++;
+		// fill by spaces
+		for(int i = 0; i < levelSpaceCount; i++)
+			sb.append("  ");
+		// add digits
+		for(int i = levelSpaceCount; i < size; i++)
+			sb.append(" ").append(((int)(i / levelDivider)) % 10);
+		sb.append(" ");
+	}
+
+	private static void addMaps(StringBuilder sb, int[][] map, int[][] enemyMap)
+	{
 		int size = map.length;
 
-		sb.append("   ");
-		for(int i = 0; i < size; i++)
-			sb.append(" ").append(i);
-		sb.append("            ");
-		for(int i = 0; i < size; i++)
-			sb.append(" ").append(i);
-		sb.append("  ").append(NEW_LINE);
-
-
-		for(int i = 0; i < size; i++)
+		int levelCount = (int)Math.log10(size - 1);
+		for(int level = levelCount; level >= 0; level--)
 		{
-			sb.append(String.format("%3d ", i));
-			for(int k = 0; k < size; k++)
-				sb.append("|").append(cellStateSign(map[i][k]));
-			sb.append("|");
-
-			sb.append("         ").append(String.format("%3d ", i));
-			for(int k = 0; k < size; k++)
-				sb.append("|").append(cellStateSign(enemyMap[i][k]));
-			sb.append("|").append(NEW_LINE);
+			sb.append("    ");  // indent
+			addHeaderNumbers(sb, level, size);
+			sb.append("             ");  // indent before enemy map
+			addHeaderNumbers(sb, level, size);
+			sb.append(NEW_LINE);
 		}
 
-		return sb.toString();
+		for(int row = 0; row < size; row++)
+		{
+			sb.append(String.format("%3d ", row));
+			for(int column = 0; column < size; column++)
+				sb.append("|").append(cellStateSign(map[row][column]));
+			sb.append("|");
+
+			sb.append("         ").append(String.format("%3d ", row));
+			for(int column = 0; column < size; column++)
+				sb.append("|").append(cellStateSign(enemyMap[row][column]));
+			sb.append("|");
+
+			sb.append(NEW_LINE);
+		}
+	}
+
+	private static void addDelimiter(StringBuilder sb, int size)
+	{
+		int delimiterLength = 0;
+		delimiterLength += 4;// for row numbers
+		delimiterLength += 2 * size + 1; // for map
+		delimiterLength += 9;// intend before enemy map
+		delimiterLength += 4;// for row numbers
+		delimiterLength += 2 * size + 1; // for map
+
+		for(int i = 0; i < delimiterLength; i++)
+			sb.append("-");
+		sb.append(NEW_LINE);
 	}
 
 	public void printGame(boolean printFirstPlayer, boolean printSecondPlayer)
@@ -424,15 +468,17 @@ public class Game implements Serializable
 				round)
 		).append(NEW_LINE);
 
-//first player screen
+		// first player screen
 		if(printFirstPlayer)
-			sb.append(printMaps(map1, map1m));
+			addMaps(sb, map1, map1m);
 
-		sb.append("----------------------------------------------------").append(NEW_LINE);
+		// delimiter
+		if(printFirstPlayer && printSecondPlayer)
+			addDelimiter(sb, mapSize);
 
-//second player screen
+		// second player screen
 		if(printSecondPlayer)
-			sb.append(printMaps(map2, map2m));
+			addMaps(sb, map2, map2m);
 
 		System.out.println(sb.toString());
 	}
