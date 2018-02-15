@@ -427,7 +427,7 @@ public class Game implements Serializable
 
 			for(int i=0;i<size;i++)
 			{
-				System.out.print(" "+i);
+				System.out.print(String.format("%3d", i));
 				for(int k=0;k<size;k++)
 					if(map2[i][k]!=0)
 						if(map2[i][k]!=3)
@@ -442,7 +442,7 @@ public class Game implements Serializable
 
 				System.out.print("|");
 
-				System.out.print("          "+i);
+				System.out.print("         " + String.format("%3d", i));
 				for(int k=0;k<size;k++)
 					if(map2m[i][k]!=0)
 						if(map2m[i][k]!=3)
