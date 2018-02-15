@@ -357,7 +357,7 @@ public class Game implements Serializable
 		}
 	}
 
-	private String cellStateSign(int cellState)
+	private static String cellStateSign(int cellState)
 	{
 		switch(cellState)
 		{
@@ -373,6 +373,38 @@ public class Game implements Serializable
 		throw new RuntimeException("Unknown cell state " + cellState);
 	}
 
+	private static final String NEW_LINE = String.format("%n");
+
+	private static String printMaps(int[][] map, int[][] enemyMap)
+	{
+		StringBuilder sb = new StringBuilder();
+		int size = map.length;
+
+		sb.append("   ");
+		for(int i = 0; i < size; i++)
+			sb.append(" ").append(i);
+		sb.append("            ");
+		for(int i = 0; i < size; i++)
+			sb.append(" ").append(i);
+		sb.append("  ").append(NEW_LINE);
+
+
+		for(int i = 0; i < size; i++)
+		{
+			sb.append(String.format("%3d ", i));
+			for(int k = 0; k < size; k++)
+				sb.append("|").append(cellStateSign(map[i][k]));
+			sb.append("|");
+
+			sb.append("         ").append(String.format("%3d ", i));
+			for(int k = 0; k < size; k++)
+				sb.append("|").append(cellStateSign(enemyMap[i][k]));
+			sb.append("|").append(NEW_LINE);
+		}
+
+		return sb.toString();
+	}
+
 	public void printGame(boolean printFirstPlayer, boolean printSecondPlayer)
 	{
 		int size = getMapSize();
@@ -382,61 +414,27 @@ public class Game implements Serializable
 		int[][] map2m = getPrintMap(getPlayersIds()[1]);
 		long round = getRound();
 
-		System.out.print("=== " + MemoryDAO.getInstance().getPlayer(getPlayersIds()[0]).getName() + " vs ");
-		System.out.println(MemoryDAO.getInstance().getPlayer(getPlayersIds()[1]).getName() + " == round " + round + " ===");
+		String firstUserName = MemoryDAO.getInstance().getPlayer(getPlayersIds()[0]).getName();
+		String secondUserName = MemoryDAO.getInstance().getPlayer(getPlayersIds()[1]).getName();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("=== %s vs %s === round %d ===",
+				firstUserName,
+				secondUserName,
+				round)
+		).append(NEW_LINE);
 
 //first player screen
 		if(printFirstPlayer)
-		{
-			System.out.print("  ");
-			for(int i = 0; i < size; i++)
-				System.out.print(" " + i);
-			System.out.print("            ");
-			for(int i = 0; i < size; i++)
-				System.out.print(" " + i);
-			System.out.println("  ");
+			sb.append(printMaps(map1, map1m));
 
+		sb.append("----------------------------------------------------").append(NEW_LINE);
 
-			for(int i = 0; i < size; i++)
-			{
-				System.out.print(String.format("%3d", i));
-				for(int k = 0; k < size; k++)
-					System.out.print("|" + cellStateSign(map1[i][k]));
-				System.out.print("|");
-
-				System.out.print("         " + String.format("%3d", i));
-				for(int k = 0; k < size; k++)
-					System.out.print("|" + cellStateSign(map1m[i][k]));
-				System.out.println("|");
-			}
-		}
-		System.out.println("----------------------------------------------------");
 //second player screen
 		if(printSecondPlayer)
-		{
-			System.out.print("  ");
-			for(int i = 0; i < size; i++)
-				System.out.print(" " + i);
-			System.out.print("            ");
-			for(int i = 0; i < size; i++)
-				System.out.print(" " + i);
-			System.out.println("  ");
+			sb.append(printMaps(map2, map2m));
 
-			for(int i = 0; i < size; i++)
-			{
-				System.out.print(String.format("%3d", i));
-				for(int k = 0; k < size; k++)
-					System.out.print("|" + cellStateSign(map2[i][k]));
-
-				System.out.print("|");
-
-				System.out.print("         " + String.format("%3d", i));
-				for(int k = 0; k < size; k++)
-					System.out.print("|" + cellStateSign(map2m[i][k]));
-
-				System.out.println("|");
-			}
-		}
+		System.out.println(sb.toString());
 	}
 
 	public boolean isSecondPlayerAI()
