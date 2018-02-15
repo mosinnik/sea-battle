@@ -357,9 +357,9 @@ public class Game implements Serializable
 		}
 	}
 
-	private String fieldStateSign(int fieldState)
+	private String cellStateSign(int cellState)
 	{
-		switch(fieldState)
+		switch(cellState)
 		{
 			case 0:
 				return "_";
@@ -370,7 +370,7 @@ public class Game implements Serializable
 			case 3:
 				return "S";
 		}
-		throw new RuntimeException("Unknown field state " + fieldState);
+		throw new RuntimeException("Unknown cell state " + cellState);
 	}
 
 	public void printGame(boolean printFirstPlayer, boolean printSecondPlayer)
@@ -401,12 +401,12 @@ public class Game implements Serializable
 			{
 				System.out.print(String.format("%3d", i));
 				for(int k = 0; k < size; k++)
-					System.out.print("|" + fieldStateSign(map1[i][k]));
+					System.out.print("|" + cellStateSign(map1[i][k]));
 				System.out.print("|");
 
 				System.out.print("         " + String.format("%3d", i));
 				for(int k = 0; k < size; k++)
-					System.out.print("|" + fieldStateSign(map1m[i][k]));
+					System.out.print("|" + cellStateSign(map1m[i][k]));
 				System.out.println("|");
 			}
 		}
@@ -426,13 +426,13 @@ public class Game implements Serializable
 			{
 				System.out.print(String.format("%3d", i));
 				for(int k = 0; k < size; k++)
-					System.out.print("|" + fieldStateSign(map2[i][k]));
+					System.out.print("|" + cellStateSign(map2[i][k]));
 
 				System.out.print("|");
 
 				System.out.print("         " + String.format("%3d", i));
 				for(int k = 0; k < size; k++)
-					System.out.print("|" + fieldStateSign(map2m[i][k]));
+					System.out.print("|" + cellStateSign(map2m[i][k]));
 
 				System.out.println("|");
 			}
