@@ -362,7 +362,7 @@ public class Game implements Serializable
 		switch(fieldState)
 		{
 			case 0:
-				return " ";
+				return "_";
 			case 1:
 				return "X";
 			case 2:
