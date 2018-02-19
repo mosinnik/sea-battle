@@ -15,7 +15,7 @@ public class MemoryDAO implements DAO
 	public static final boolean VERTICAL = true;
 	public static final boolean HORIZONTAL = false;
 
-	static MemoryDAO memoryDAO;
+	private static MemoryDAO memoryDAO;
 	private Map<Long, Player> players;
 	private Map<Long, Game> games;
 	private Map<Long, PlayerStat> playersStat;
@@ -63,9 +63,9 @@ public class MemoryDAO implements DAO
 	/**
 	 * game's methods
 	 */
-	public long newGame(Long firstPlayerId, Long secondPlayerId, int mapSize)
+	public long newGame(Player firstPlayer, Player secondPlayer, int mapSize)
 	{
-		Game g = new Game(firstPlayerId, secondPlayerId, mapSize);
+		Game g = new Game(firstPlayer, secondPlayer, mapSize);
 		addGame(g);
 		return g.getId();
 	}
@@ -183,10 +183,10 @@ public class MemoryDAO implements DAO
 
 	private MemoryDAO()
 	{
-		players = new HashMap<Long, Player>();
-		games = new HashMap<Long, Game>();
+		players = new HashMap<>();
+		games = new HashMap<>();
 		//ais=new HashMap<Long, AI>();
-		playersStat = new HashMap<Long, PlayerStat>();
+		playersStat = new HashMap<>();
 	}
 
 	public static MemoryDAO getInstance()

@@ -3,15 +3,38 @@ package core;
 import DAO.MemoryDAO;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
+import core.characters.Player;
 
 import java.io.Serializable;
 
 public class Game implements Serializable
 {
-	public Game(long firstPlayerId, long secondPlayerId, int mapSize)
+	private boolean state;//if false then finished
+	private GameMap map1;
+	private GameMap map2;
+	private int[][] printMap1;
+	private int[][] printMap2;
+
+	private int[][] checkMap1;
+	private int[][] checkMap2;
+
+	private Player firstPlayer;
+	private Player secondPlayer;
+	private boolean step;//true if step by first player
+
+	private int mapSize;
+	private long round;
+	private long time;
+	private boolean winFirst;
+
+	private long id;
+	private static long gameId;
+	private boolean isSecondPlayerAI;
+
+	public Game(Player firstPlayer, Player secondPlayer, int mapSize)
 	{
-		map1 = new GameMap(mapSize, firstPlayerId);
-		map2 = new GameMap(mapSize, secondPlayerId);
+		map1 = new GameMap(mapSize, firstPlayer);
+		map2 = new GameMap(mapSize, secondPlayer);
 		printMap1 = new int[mapSize][mapSize];
 		printMap2 = new int[mapSize][mapSize];
 
@@ -23,9 +46,9 @@ public class Game implements Serializable
 				checkMap1[i][k] = 0;
 				checkMap2[i][k] = 0;
 			}
-		this.firstPlayerId = firstPlayerId;
-		this.secondPlayerId = secondPlayerId;
-		this.isSecondPlayerAI = MemoryDAO.getInstance().getPlayer(secondPlayerId).isAI();
+		this.firstPlayer = firstPlayer;
+		this.secondPlayer = secondPlayer;
+		this.isSecondPlayerAI = secondPlayer.isAI();
 		this.mapSize = mapSize;
 		step = true;
 		state = true;
@@ -36,38 +59,38 @@ public class Game implements Serializable
 		Game.incGameId();
 	}
 
-	public void setShip(CoordinateArray coordinates, int length, long player)
+	public void setShip(CoordinateArray coordinates, int length, Player player)
 	{
-		if(player == map1.getPlayerId())
+		if(player == map1.getOwner())
 		{
 			map1.setShip(coordinates, length);
 			setShipCheck(coordinates, length, player);
 		}
-		else if(player == map2.getPlayerId())
+		else if(player == map2.getOwner())
 		{
 			map2.setShip(coordinates, length);
 			setShipCheck(coordinates, length, player);
 		}
 	}
 
-	public Ship getShip(int i, int k, long player)
+	public Ship getShip(int i, int k, Player player)
 	{
-		if(player == map1.getPlayerId())
+		if(player == map1.getOwner())
 			return map2.getShip(i, k);
-		else if(player == map2.getPlayerId())
+		else if(player == map2.getOwner())
 			return map1.getShip(i, k);
 		return null;
 	}
 
-	public void resetMap(long player)
+	public void resetMap(Player player)
 	{
-		if(player == map1.getPlayerId())
+		if(player == map1.getOwner())
 			map1.resetMap();
-		else if(player == map2.getPlayerId())
+		else if(player == map2.getOwner())
 			map2.resetMap();
 	}
 
-	public BooleanArray fire(int i, int k, long player)
+	public BooleanArray fire(int i, int k, Player player)
 	{
 		//b[0]-is fire successful
 		//b[1]-is fire kill whole ship (need for AI)
@@ -78,7 +101,7 @@ public class Game implements Serializable
 			b = fireM(i, k, player);
 			if(b.isShotSuccessful())
 			{
-				if(player == map1.getPlayerId())
+				if(player == map1.getOwner())
 				{
 					map2.decNumbOfDecks();
 					if(map2.getNumbOfDecks() == 0)
@@ -88,7 +111,7 @@ public class Game implements Serializable
 					}
 					return b;
 				}
-				else if(player == map2.getPlayerId())
+				else if(player == map2.getOwner())
 				{
 					map1.decNumbOfDecks();
 					if(map1.getNumbOfDecks() == 0)
@@ -109,11 +132,11 @@ public class Game implements Serializable
 		return b;
 	}
 
-	public BooleanArray fireM(int i, int k, long player)
+	public BooleanArray fireM(int i, int k, Player player)
 	{
 
 		BooleanArray b = new BooleanArray();
-		if(player == map2.getPlayerId())
+		if(player == map2.getOwner())
 		{
 			if(map1.getShip(i, k) != null)
 			{
@@ -131,7 +154,7 @@ public class Game implements Serializable
 				printMap2[i][k] = 3;
 			}
 		}
-		else if(player == map1.getPlayerId())
+		else if(player == map1.getOwner())
 		{
 			if(map2.getShip(i, k) != null)
 			{
@@ -155,8 +178,8 @@ public class Game implements Serializable
 	public long[] getPlayersIds()
 	{
 		long[] l = new long[2];
-		l[0] = firstPlayerId;
-		l[1] = secondPlayerId;
+		l[0] = firstPlayer.getId();
+		l[1] = secondPlayer.getId();
 		return l;
 	}
 
@@ -192,16 +215,15 @@ public class Game implements Serializable
 
 	public boolean isPlayersIds(long id1, long id2)
 	{
-		if(firstPlayerId == id1 && secondPlayerId == id2 || firstPlayerId == id2 && secondPlayerId == id1)
-			return true;
-		return false;
+		return firstPlayer.getId() == id1 && secondPlayer.getId() == id2 ||
+				firstPlayer.getId() == id2 && secondPlayer.getId() == id1;
 	}
 
 	public int[][] getMap(long id)
 	{
 		int[][] ik = new int[mapSize][mapSize];
 		GameMap map;
-		if(id == firstPlayerId)
+		if(id == firstPlayer.getId())
 			map = map1;
 		else
 			map = map2;
@@ -226,7 +248,7 @@ public class Game implements Serializable
 
 	public int[][] getPrintMap(long id)
 	{
-		if(id == firstPlayerId)
+		if(id == firstPlayer.getId())
 			return printMap1;
 		else
 			return printMap2;
@@ -234,7 +256,7 @@ public class Game implements Serializable
 
 	public int[][] getCheckMap(long id)
 	{
-		if(id == firstPlayerId)
+		if(id == firstPlayer.getId())
 			return checkMap1;
 		else
 			return checkMap2;
@@ -264,7 +286,7 @@ public class Game implements Serializable
 		return n;
 	}
 
-	public boolean checkShipCoordinates(CoordinateArray coordinates, int length, long player)
+	public boolean checkShipCoordinates(CoordinateArray coordinates, int length, Player player)
 	{
 		int di = 0, dk = 0;
 
@@ -272,7 +294,7 @@ public class Game implements Serializable
 		int k = coordinates.getK();
 		int[][] map;
 
-		if(player == map1.getPlayerId())
+		if(player == map1.getOwner())
 			map = checkMap1;
 		else
 			map = checkMap2;
@@ -299,7 +321,7 @@ public class Game implements Serializable
 		return true;
 	}
 
-	void setShipCheck(CoordinateArray coordinates, int length, long player)
+	void setShipCheck(CoordinateArray coordinates, int length, Player player)
 	{
 		int di = 0;
 		int dk = 0;
@@ -308,7 +330,7 @@ public class Game implements Serializable
 		int k = coordinates.getK();
 		int[][] map;
 
-		if(player == map1.getPlayerId())
+		if(player == map1.getOwner())
 			map = checkMap1;
 		else
 			map = checkMap2;
@@ -522,26 +544,4 @@ public class Game implements Serializable
 		gameId++;
 	}
 
-
-	private boolean state;//if false then finished
-	private GameMap map1;
-	private GameMap map2;
-	private int[][] printMap1;
-	private int[][] printMap2;
-
-	private int[][] checkMap1;
-	private int[][] checkMap2;
-
-	private long firstPlayerId;
-	private long secondPlayerId;
-	private boolean step;//true if step by first player
-
-	private int mapSize;
-	private long round;
-	private long time;
-	private boolean winFirst;
-
-	private long id;
-	private static long gameId;
-	private boolean isSecondPlayerAI;
 }

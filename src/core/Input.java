@@ -1,13 +1,20 @@
 package core;
 
 import DAO.MemoryDAO;
+import commands.NewPlayer;
 import core.arrays.CoordinateArray;
+import core.characters.Player;
 
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Input
 {
+	//todo: add all strings to constants
+	final static String ERROR_YES_OR_NO = "Error: need 1 char 'y' or 'n'. Repeat input.";
+	final static String YES_OR_NO = "Yes or no?[y/n]";
+	final static String INPUT_NAME = "Input name";
+
 	public static CoordinateArray inputFireCoordinates(int mapSize)
 	{
 		CoordinateArray coordinates = new CoordinateArray(-1, -1);
@@ -78,11 +85,11 @@ public class Input
 			if(strTok.hasMoreTokens())
 			{
 				st = strTok.nextToken().toLowerCase();
-				if(st.equals("exit"))
+				if(isExitCommand(st))
 				{
 					return coordinates;
 				}
-				else if(st.equals("help") || st.equals("-h") || st.equals("/?"))
+				if(isHelpCommand(st))
 				{
 					coordinates.setI(-2);
 					return coordinates;
@@ -119,14 +126,17 @@ public class Input
 			if(strTok.hasMoreTokens())
 			{
 				st = strTok.nextToken();
-				if(st.equals("v"))
-					coordinates.setDirection(MemoryDAO.VERTICAL);
-				else if(st.equals("h"))
-					coordinates.setDirection(MemoryDAO.HORIZONTAL);
-				else
+				switch(st)
 				{
-					System.out.println("Direction should be 'h' or 'v'. Repeat input.");
-					return inputShipCoordinates(mapSize, maxLength);
+					case "v":
+						coordinates.setDirection(MemoryDAO.VERTICAL);
+						break;
+					case "h":
+						coordinates.setDirection(MemoryDAO.HORIZONTAL);
+						break;
+					default:
+						System.out.println("Direction should be 'h' or 'v'. Repeat input.");
+						return inputShipCoordinates(mapSize, maxLength);
 				}
 			}
 		}
@@ -173,8 +183,7 @@ public class Input
 	{
 		System.out.println(INPUT_NAME);
 		String name = inputLine();
-		name.trim();
-		return name;
+		return name.trim();
 	}
 
 	public static String inputLine()
@@ -195,27 +204,127 @@ public class Input
 		System.out.println(YES_OR_NO);
 		Scanner in = new Scanner(System.in);
 		String st = in.nextLine();
-		st.toLowerCase();
+		st = st.toLowerCase();
 		if(st.length() != 1)
 		{
 			System.out.println(ERROR_YES_OR_NO);
 			return yesOrNo();
 		}
-		if(st.equals("y"))
-			return true;
-		else if(st.equals("n"))
-			return false;
-		else
+		switch(st)
 		{
-			System.out.println(ERROR_YES_OR_NO);
-			return yesOrNo();
+			case "y":
+				return true;
+			case "n":
+				return false;
+			default:
+				System.out.println(ERROR_YES_OR_NO);
+				return yesOrNo();
 		}
 	}
 
+	public static boolean isExitCommand(String command)
+	{
+		if(command == null)
+			return false;
+		return command.toLowerCase().equals("exit");
+	}
 
-	//todo: add all strings to constants
-	final static String ERROR_YES_OR_NO = "Error: need 1 char 'y' or 'n'. Repeat input.";
-	final static String YES_OR_NO = "Yes or no?[y/n]";
-	final static String INPUT_NAME = "Input name";
+	public static boolean isStopCommand(String command)
+	{
+		if(command == null)
+			return false;
+		return command.toLowerCase().equals("stop");
+	}
 
+	public static boolean isHelpCommand(String command)
+	{
+		if(command == null)
+			return false;
+
+		command = command.toLowerCase();
+		switch(command)
+		{
+			case "help":
+			case "-h":
+			case "/?":
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	public static Player askForNewPlayerInfo(String title, Player enemyPlayer, String helpMessage)
+	{
+		while(true)
+		{
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println("Enter " + title + " name:");
+			String playerName = inputName();
+			if(isExitCommand(playerName))
+				break;
+
+			if(isHelpCommand(playerName))
+			{
+				System.out.println(helpMessage);
+				continue;
+			}
+
+			long playerId = MemoryDAO.getInstance().getPlayerId(playerName);
+			if(playerId == -1)
+			{
+				System.out.print("Player with same name didn't create yet. Create it? ");
+				if(!yesOrNo())
+					continue;
+
+				playerId = NewPlayer.newPlayer(playerName);
+				return MemoryDAO.getInstance().getPlayer(playerId);
+			}
+
+			if(enemyPlayer == null || enemyPlayer.getId() != playerId)
+				break;
+
+			System.out.print("This name already use first player. Enter your name again.");
+		}
+
+		return null;
+	}
+
+	public static Player askForLoadPlayerInfo(String title, Player enemyPlayer, String helpMessage)
+	{
+		while(true)
+		{
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println("Enter " + title + " name:");
+			String playerName = inputName();
+			if(isExitCommand(playerName))
+				break;
+
+			if(isHelpCommand(playerName))
+			{
+				System.out.println(helpMessage);
+				continue;
+			}
+
+			long playerId = MemoryDAO.getInstance().getPlayerId(playerName);
+			if(playerId == -1)
+			{
+				System.out.println("Error: player with this name not exists. Check name or reload DB.");
+				continue;
+			}
+
+			if(enemyPlayer != null && enemyPlayer.getId() == playerId)
+			{
+				System.out.print("This name already use first player. Enter your name again.");
+				continue;
+			}
+
+			return MemoryDAO.getInstance().getPlayer(playerId);
+		}
+
+		return null;
+	}
 }

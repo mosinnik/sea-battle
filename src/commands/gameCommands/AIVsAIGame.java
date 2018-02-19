@@ -30,10 +30,10 @@ public class AIVsAIGame implements Command
 //start game between AIs
 		firstAIId = MemoryDAO.getInstance().newAI("firstAI", 10);
 		secondAIId = MemoryDAO.getInstance().newAI("secondAI", 10);
-		gameId = MemoryDAO.getInstance().newGame(firstAIId, secondAIId, mapSize);
-		g = MemoryDAO.getInstance().getGame(gameId);
 		firstAI = (AI)MemoryDAO.getInstance().getPlayer(firstAIId);
 		secondAI = (AI)MemoryDAO.getInstance().getPlayer(secondAIId);
+		gameId = MemoryDAO.getInstance().newGame(firstAI, secondAI, mapSize);
+		g = MemoryDAO.getInstance().getGame(gameId);
 		firstAI.setGame(g);
 		secondAI.setGame(g);
 		AIRunnable AIR = new AIRunnable(firstAI, secondAI, g);
@@ -44,7 +44,7 @@ public class AIVsAIGame implements Command
 		while(true)
 		{
 			String str = Input.inputLine();
-			if(str.toLowerCase().equals("exit") || str.toLowerCase().equals("stop"))
+			if(Input.isExitCommand(str) || Input.isStopCommand(str))
 			{
 				gameThread.interrupt();
 				gameThread.stop();
@@ -53,7 +53,7 @@ public class AIVsAIGame implements Command
 				MemoryDAO.getInstance().setGame(g);
 				return;
 			}
-			else if(str.toLowerCase().equals("help") || str.toLowerCase().equals("-h") || str.toLowerCase().equals("/?"))
+			else if(Input.isHelpCommand(str))
 			{
 				gameThread.suspend();
 				System.out.println("\n\n\n\t!!!PAUSE!!!!\n\nHelp.\nYou look for game between AIs. You can stop it and continue if need but you have only 1 second for input.[input 'stop','pause','play']");

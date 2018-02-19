@@ -7,8 +7,10 @@ import core.Input;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
 import core.characters.AI;
+import core.characters.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,35 +21,29 @@ import java.util.HashMap;
  */
 public class ContinueHumanVsAIGame implements Command
 {
+	public String helpMessage()
+	{
+		return "\n\n\n\n\n" +
+				"Help.\n" +
+				"You wil play with AI. " +
+				"For start game you should inter your name. " +
+				"If you aren't register you should do it.";
+	}
+
+
 	public void execute()
 	{
-//inter and check 'name'
-		String name;
-		long playerId;
-		while(true)
-		{
-			name = Input.inputName();
+		//inter and check player info
+		Player player = Input.askForLoadPlayerInfo("Your", null, helpMessage());
+		if(player == null)
+			return;
 
-			if(name.toLowerCase().equals("exit"))
-				return;
-			else if(name.toLowerCase().equals("help") || name.toLowerCase().equals("-h") || name.toLowerCase().equals("/?"))
-				System.out.println("\n\n\n\n\nHelp.\nYou wil play with AI. For start game you should inter your name. If you aren't register you should do it.");
-
-			playerId = MemoryDAO.getInstance().getPlayerId(name);
-			if(playerId == -1)
-			{
-				System.out.println("Error: player with this name don't create. Check name or reload DB.");
-				continue;
-			}
-			break;
-		}
-
-		HashMap<Long, Game> games = MemoryDAO.getInstance().getGamesHashMap();
-		HashMap<Long, Game> checkedGames = new HashMap<Long, Game>();
+		Map<Long, Game> games = MemoryDAO.getInstance().getGamesHashMap();
+		Map<Long, Game> checkedGames = new HashMap<Long, Game>();
 		System.out.println("Game id\tMap size\tRound");
 		for(Game g : games.values())
 			if(g.isSecondPlayerAI() && g.getState())
-				if(g.getPlayersIds()[0] == playerId)
+				if(g.getPlayersIds()[0] == player.getId())
 				{
 					checkedGames.put(g.getId(), g);
 					System.out.println("\n=====================================================");
@@ -81,7 +77,7 @@ public class ContinueHumanVsAIGame implements Command
 			if(g.getStep())
 			{
 //get from first player(human) coordinates for fire
-				System.out.print("\n" + name);
+				System.out.print("\n" + player.getName());
 				coordinates = Input.inputFireCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{
@@ -90,15 +86,15 @@ public class ContinueHumanVsAIGame implements Command
 					MemoryDAO.getInstance().setGame(g);
 					return;
 				}
-				b = g.fire(coordinates.getI(), coordinates.getK(), playerId);
+				b = g.fire(coordinates.getI(), coordinates.getK(), player);
 				if(!b.isShotSuccessful())
 					g.changeStep();
 				else
-					MemoryDAO.getInstance().getPlayer(playerId).addScore(1);
+					player.addScore(1);
 				if(b.isShipDown())
 				{
 					System.out.println("=============== This ship is down! ==============");
-					MemoryDAO.getInstance().getPlayer(playerId).addScore(3);
+					player.addScore(3);
 				}
 			}
 			else

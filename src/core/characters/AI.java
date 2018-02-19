@@ -41,7 +41,7 @@ public class AI extends Player
 			for(int x = 0; x < mapSize; x++)
 				for(int y = 0; y < mapSize; y++)
 					shipMap[x][y] = 0;
-			g.resetMap(super.getId());
+			g.resetMap(this);
 
 			for(int length = n; length > 0; length--)
 			{
@@ -50,9 +50,9 @@ public class AI extends Player
 					coordinates.setI(rnd.nextInt(mapSize));
 					coordinates.setK(rnd.nextInt(mapSize));
 					coordinates.setDirection(rnd.nextBoolean());
-					if(g.checkShipCoordinates(coordinates, length, super.getId()))
+					if(g.checkShipCoordinates(coordinates, length, this))
 					{
-						g.setShip(coordinates, length, super.getId());
+						g.setShip(coordinates, length, this);
 						checker = 0;
 					}
 					else
@@ -136,7 +136,7 @@ public class AI extends Player
 		//System.out.println(i+" "+k);
 		if(mapEnemy[i][k] == 0)
 		{
-			b = g.fire(i, k, super.getId());
+			b = g.fire(i, k, this);
 			if(b.isShotSuccessful())
 			{
 				mapEnemy[i][k] = 1;
@@ -162,7 +162,7 @@ public class AI extends Player
 
 	public void checkDownShip(int i, int k)
 	{
-		int[] c = g.getShip(i, k, super.getId()).getPos();
+		int[] c = g.getShip(i, k, this).getPos();
 		int di = 0;
 		int dk = 0;
 

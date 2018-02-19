@@ -16,10 +16,10 @@ public class NewPlayer implements Command
 	{
 		System.out.println("\n\n\n\t\tNewPlayer!!!!");
 		String name = Input.inputName();
-		if(name.toLowerCase().equals("exit"))
+		if(Input.isExitCommand(name))
 			return;
 
-		if(name.toLowerCase().equals("help") || name.toLowerCase().equals("-h") || name.toLowerCase().equals("/?"))
+		if(Input.isHelpCommand(name))
 		{
 			System.out.println("\nHelp.\nIf you want create new player inter name and if this name not used by other men you can use it else you should inter other name.");
 			execute();

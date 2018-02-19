@@ -1,17 +1,23 @@
 package core;
 
 import core.arrays.CoordinateArray;
+import core.characters.Player;
 
 import java.io.Serializable;
 
 
 public class GameMap implements Serializable
 {
-	GameMap(int mapSize, long playerId)
+	private Player owner;
+	public Ship[][] map;
+	private int mapSize;
+	private int numbOfDecks;
+
+	GameMap(int mapSize, Player owner)
 	{
 		this.mapSize = mapSize;
 		map = new Ship[mapSize][mapSize];
-		this.playerId = playerId;
+		this.owner = owner;
 		numbOfDecks = 0;
 	}
 
@@ -62,9 +68,9 @@ public class GameMap implements Serializable
 		return null;
 	}
 
-	public long getPlayerId()
+	public Player getOwner()
 	{
-		return playerId;
+		return owner;
 	}
 
 	public int getNumbOfDecks()
@@ -76,9 +82,4 @@ public class GameMap implements Serializable
 	{
 		numbOfDecks--;
 	}
-
-	private long playerId;
-	public Ship[][] map;
-	private int mapSize;
-	private int numbOfDecks;
 }

@@ -2,12 +2,12 @@ package commands.gameCommands;
 
 import DAO.MemoryDAO;
 import commands.Command;
-import commands.NewPlayer;
 import core.Game;
 import core.Input;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
 import core.characters.AI;
+import core.characters.Player;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,44 +18,36 @@ import core.characters.AI;
  */
 public class HumanVsAIGame implements Command
 {
+	public String helpMessage()
+	{
+		return "\n\n\n\n\n" +
+				"Help.\n" +
+				"You wil play with AI. " +
+				"For start game you should inter your name. " +
+				"If you aren't register you should do it.";
+	}
+
+
 	public void execute()
 	{
-//inter and check 'name'
-		String name;
-		long playerId;
-		while(true)
-		{
-			name = Input.inputName();
+		//enter player info
+		Player player = Input.askForNewPlayerInfo("your", null, helpMessage());
+		if(player == null)
+			return;
 
-			if(name.toLowerCase().equals("exit"))
-				return;
-			else if(name.toLowerCase().equals("help") || name.toLowerCase().equals("-h") || name.toLowerCase().equals("/?"))
-				System.out.println("\n\n\n\n\nHelp.\nYou wil play with AI. For start game you should inter your name. If you aren't register you should do it.");
-
-			playerId = MemoryDAO.getInstance().getPlayerId(name);
-			if(playerId == -1)
-			{
-				System.out.print("Player with such name don't create. Create it? ");
-				if(Input.yesOrNo())
-					playerId = NewPlayer.newPlayer(name);
-				else
-					continue;
-			}
-			break;
-		}
-//create AI
-		long AIId = MemoryDAO.getInstance().newAI(name + "AI", 10);
-//input mapSize
+		//create AI
+		long aiId = MemoryDAO.getInstance().newAI(player.getName() + "AI", 10);
+		AI ai = (AI)MemoryDAO.getInstance().getPlayer(aiId);
+		//input mapSize
 		int mapSize = Input.inputMapSize();
-//start game
-		long gameId = MemoryDAO.getInstance().newGame(playerId, AIId, mapSize);
+		//start game
+		long gameId = MemoryDAO.getInstance().newGame(player, ai, mapSize);
 
 		Game g = MemoryDAO.getInstance().getGame(gameId);
-		AI ai = (AI)MemoryDAO.getInstance().getPlayer(AIId);
 		ai.setGame(g);
 		g.printGame(true, false);
-//add ships by player to sea
-		System.out.println("\n" + name + " input coordinates for ship:");
+		//add ships by player to sea
+		System.out.println("\n" + player.getName() + " input coordinates for ship:");
 		int n = g.getCountShip();
 		CoordinateArray coordinates = new CoordinateArray(-1, -1, false);
 		for(int length = n; length > 0; length--)
@@ -75,9 +67,9 @@ public class HumanVsAIGame implements Command
 				}
 				else
 				{
-					if(g.checkShipCoordinates(coordinates, length, playerId))
+					if(g.checkShipCoordinates(coordinates, length, player))
 					{
-						g.setShip(coordinates, length, playerId);
+						g.setShip(coordinates, length, player);
 					}
 					else
 					{
@@ -89,15 +81,15 @@ public class HumanVsAIGame implements Command
 				g.printGame(true, false);
 			}
 
-//game
+		//game
 		BooleanArray b = null;
 		coordinates = new CoordinateArray(-1, -1);
 		while(g.getState())
 		{
 			if(g.getStep())
 			{
-//get from first player(human) coordinates for fire
-				System.out.print("\n" + name);
+				//get from first player(human) coordinates for fire
+				System.out.print("\n" + player.getName());
 				coordinates = Input.inputFireCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{
@@ -106,15 +98,15 @@ public class HumanVsAIGame implements Command
 					MemoryDAO.getInstance().setGame(g);
 					return;
 				}
-				b = g.fire(coordinates.getI(), coordinates.getK(), playerId);
+				b = g.fire(coordinates.getI(), coordinates.getK(), player);
 				if(!b.isShotSuccessful())
 					g.changeStep();
 				else
-					MemoryDAO.getInstance().getPlayer(playerId).addScore(1);
+					player.addScore(1);
 				if(b.isShipDown())
 				{
 					System.out.println("=============== This ship is down! ==============");
-					MemoryDAO.getInstance().getPlayer(playerId).addScore(3);
+					player.addScore(3);
 				}
 			}
 			else
