@@ -24,5 +24,4 @@ target/
 */logs/
 logs/
 docker/
-db*
-db*
+./db*
