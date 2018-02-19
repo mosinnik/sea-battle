@@ -39,7 +39,7 @@ public class ContinueHumanVsAIGame implements Command
 			return;
 
 		Map<Long, Game> games = MemoryDAO.getInstance().getGamesHashMap();
-		Map<Long, Game> checkedGames = new HashMap<Long, Game>();
+		Map<Long, Game> checkedGames = new HashMap<>();
 		System.out.println("Game id\tMap size\tRound");
 		for(Game g : games.values())
 			if(g.isSecondPlayerAI() && g.getState())
