@@ -118,9 +118,10 @@ public class HumanVsAIGame implements Command
 			g.printGame(true, false); //invisible AI screen
 		}
 		System.out.print("\n\n\n\n\t\tGame over.");
-		if(g.getWin())
-			System.out.println(" You win!");
-		else
+
+		if(g.getWinner().isAI())
 			System.out.println(" AI win!");
+		else
+			System.out.println(" You win!");
 	}
 }

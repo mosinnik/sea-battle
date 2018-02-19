@@ -3,7 +3,6 @@ package dao;
 import core.Game;
 import core.characters.AI;
 import core.characters.Player;
-import statistics.PlayerStat;
 import statistics.Statistics;
 
 import java.util.HashMap;
@@ -18,7 +17,6 @@ public class MemoryDAO implements DAO
 	private static MemoryDAO memoryDAO;
 	private Map<Long, Player> players;
 	private Map<Long, Game> games;
-	private Map<Long, PlayerStat> playersStat;
 //	private HashMap<Long, AI> ais;
 
 	private Statistics stats;
@@ -28,8 +26,7 @@ public class MemoryDAO implements DAO
 	 */
 	public void collectStat()
 	{
-		stats = null;
-		stats = new Statistics(games, players);
+		stats = new Statistics(games);
 		stats.collectStat();
 	}
 
@@ -50,13 +47,11 @@ public class MemoryDAO implements DAO
 
 	public void setPlayersHashMap(Map<Long, Player> players)
 	{
-		this.players = null;
 		this.players = players;
 	}
 
 	public void setGamesHashMap(Map<Long, Game> games)
 	{
-		this.games = null;
 		this.games = games;
 	}
 
@@ -186,7 +181,6 @@ public class MemoryDAO implements DAO
 		players = new HashMap<>();
 		games = new HashMap<>();
 		//ais=new HashMap<Long, AI>();
-		playersStat = new HashMap<>();
 	}
 
 	public static MemoryDAO getInstance()
@@ -202,6 +196,5 @@ public class MemoryDAO implements DAO
 	{
 		players.clear();
 		games.clear();
-		playersStat.clear();
 	}
 }

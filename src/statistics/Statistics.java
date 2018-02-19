@@ -9,44 +9,38 @@ import java.util.Map;
 
 public class Statistics
 {
-	private Map<Long, PlayerStat> mPlayersStat;
-	private Map<Long, Player> mPlayers;
+	private Map<Player, PlayerStat> mPlayersStat;
 	private Map<Long, Game> mGames;
 
-	public Statistics(Map<Long, Game> mGames, Map<Long, Player> mPlayers)
+	public Statistics(Map<Long, Game> mGames)
 	{
 		this.mPlayersStat = new HashMap<>();
 		this.mGames = mGames;
-		this.mPlayers = mPlayers;
+	}
+
+	private void updateStat(Player player, Game g)
+	{
+		if(player.isAI())
+			return;
+
+		PlayerStat ps = mPlayersStat.computeIfAbsent(player, PlayerStat::new);
+		ps.addGameTime(g.getTime());
+		ps.addNumberGame();
+
+		if(g.getWinner() == null)
+			ps.addNumberNotFinishGame();
+		else if(g.getWinner() == player)
+			ps.addNumberWinGame();
+		else
+			ps.addNumberLoseGame();
 	}
 
 	public void collectStat()
 	{
-		long id = 0;
-		for(Player p : mPlayers.values())
+		for(Game g : mGames.values())
 		{
-			if(!p.isAI())
-			{
-				PlayerStat ps = new PlayerStat(p.getName());
-				ps.addScore(p.getScore());
-				id = p.getId();
-				for(Game g : mGames.values())
-				{
-					if(g.getPlayersIds()[0] == id || g.getPlayersIds()[1] == id)
-					{
-						ps.addGameTime(g.getTime());
-						ps.addNumberGame();
-						if(!g.getState())
-							if((g.getWin() && g.getPlayersIds()[0] == id) || (!g.getWin() && !(g.getPlayersIds()[0] == id)))
-								ps.addNumberWinGame();
-							else
-								ps.addNumberLoseGame();
-						else
-							ps.addNumberNotFinishGame();
-					}
-				}
-				mPlayersStat.put(ps.getId(), ps);
-			}
+			updateStat(g.getFirstPlayer(), g);
+			updateStat(g.getSecondPlayer(), g);
 		}
 	}
 

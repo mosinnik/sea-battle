@@ -174,10 +174,7 @@ public class HumanVsHumanGame implements Command
 			g.printGame(true, true);
 		}
 		System.out.print("\n\n\n\n\t\tGame over. ");
-		if(g.getWin())
-			System.out.println(firstPlayer.getName() + " win!");
-		else
-			System.out.println(secondPlayer.getName() + " win!");
+		System.out.println(g.getWinner().getName() + " win!");
 	}
 }
  

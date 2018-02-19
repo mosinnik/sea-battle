@@ -2,16 +2,18 @@ package statistics;
 
 import core.characters.Player;
 
-public class PlayerStat extends Player
+public class PlayerStat
 {
-	public PlayerStat(String name)
+	private Player player;
+	private long inGameTime;
+	private int numberWinGame;
+	private int numberLoseGame;
+	private int numberNotFinishGame;
+	private int numberGames;
+
+	public PlayerStat(Player player)
 	{
-		super(name, false);
-		inGameTime = 0;
-		numberWinGame = 0;
-		numberLoseGame = 0;
-		numberNotFinishGame = 0;
-		numberGames = 0;
+		this.player = player;
 	}
 
 	public void addGameTime(long time)
@@ -61,12 +63,6 @@ public class PlayerStat extends Player
 
 	public String toString()
 	{
-		return getName() + "\t" + getScore() + "\t" + numberGames + "\t" + numberWinGame + "\t" + numberLoseGame + "\t" + inGameTime;
+		return player.getName() + "\t" + player.getScore() + "\t" + numberGames + "\t" + numberWinGame + "\t" + numberLoseGame + "\t" + inGameTime;
 	}
-
-	private long inGameTime;
-	private int numberWinGame;
-	private int numberLoseGame;
-	private int numberNotFinishGame;
-	private int numberGames;
 }

@@ -4,6 +4,14 @@ import java.io.Serializable;
 
 public class Player implements Serializable
 {
+	private String name;
+	private int score;
+	private long id;
+	private boolean isAI;
+	private String password;
+
+	private static long playerId;
+
 	public Player(String name, boolean isAI)
 	{
 		this.name = name;
@@ -65,13 +73,4 @@ public class Player implements Serializable
 	{
 		playerId++;
 	}
-
-	private String name;
-	private int score;
-	private long id;
-	private boolean isAI;
-	private String password;
-
-	private static long playerId;
-
 }

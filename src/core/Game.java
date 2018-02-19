@@ -25,7 +25,8 @@ public class Game implements Serializable
 	private int mapSize;
 	private long round;
 	private long time;
-	private boolean winFirst;
+	private Player winner;
+	private Player loser;
 
 	private long id;
 	private static long gameId;
@@ -53,7 +54,6 @@ public class Game implements Serializable
 		step = true;
 		state = true;
 		time = 0;
-		winFirst = true;
 		round = 0;
 		id = gameId;
 		Game.incGameId();
@@ -107,7 +107,8 @@ public class Game implements Serializable
 					if(map2.getNumbOfDecks() == 0)
 					{
 						state = false;
-						winFirst = true;
+						winner = map1.getOwner();
+						loser = map2.getOwner();
 					}
 					return b;
 				}
@@ -117,17 +118,16 @@ public class Game implements Serializable
 					if(map1.getNumbOfDecks() == 0)
 					{
 						state = false;
-						winFirst = false;
+						winner = map2.getOwner();
+						loser = map1.getOwner();
 					}
 					return b;
 				}
 			}
-
-
 		}
 		else
 		{
-			System.out.println("By state:Game is finished. " + (winFirst ? "First" : "Second") + " player win.");
+			System.out.println("By state: Game is finished.\nPlayer " + winner.getName() + " won.");
 		}
 		return b;
 	}
@@ -203,9 +203,14 @@ public class Game implements Serializable
 		return time;
 	}
 
-	public boolean getWin()
+	public Player getWinner()
 	{
-		return winFirst;
+		return winner;
+	}
+
+	public Player getLoser()
+	{
+		return loser;
 	}
 
 	public long getId()
@@ -524,6 +529,16 @@ public class Game implements Serializable
 	{
 //change step between players 
 		step = !step;
+	}
+
+	public Player getFirstPlayer()
+	{
+		return firstPlayer;
+	}
+
+	public Player getSecondPlayer()
+	{
+		return secondPlayer;
 	}
 
 

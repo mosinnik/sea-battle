@@ -108,7 +108,7 @@ class AIRunnable implements Runnable
 			}
 			System.out.print("\n\n");
 			g.printGame(true, true);
-//between 2 steps 1 second
+			//between 2 steps 1 second
 			try
 			{
 				Thread.sleep(1000);
@@ -119,7 +119,7 @@ class AIRunnable implements Runnable
 			}
 		}
 		System.out.print("\n\n\n\n\t\tGame over.");
-		if(g.getWin())
+		if(g.getWinner() == firstAI)
 			System.out.println(" First AI win!");
 		else
 			System.out.println(" Second AI win!");
