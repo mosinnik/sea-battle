@@ -4,11 +4,12 @@ import core.Game;
 import core.characters.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Statistics
 {
-	public Statistics(HashMap<Long, Game> mGames, HashMap<Long, Player> mPlayers)
+	public Statistics(Map<Long, Game> mGames, Map<Long, Player> mPlayers)
 	{
 		this.mPlayersStat=new HashMap<Long, PlayerStat>();
 		this.mGames=mGames;
@@ -54,7 +55,7 @@ public class Statistics
 		}
 	}
 
-	private HashMap<Long, PlayerStat> mPlayersStat;
-	private HashMap<Long, Player> mPlayers;
-	private HashMap<Long, Game> mGames;
+	private Map<Long, PlayerStat> mPlayersStat;
+	private Map<Long, Player> mPlayers;
+	private Map<Long, Game> mGames;
 }

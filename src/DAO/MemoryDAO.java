@@ -1,13 +1,13 @@
 package DAO;
 
-import core.characters.AI;
 import core.Game;
+import core.characters.AI;
 import core.characters.Player;
 import statistics.PlayerStat;
 import statistics.Statistics;
 
 import java.util.HashMap;
-
+import java.util.Map;
 
 
 public class MemoryDAO implements DAO
@@ -16,9 +16,9 @@ public class MemoryDAO implements DAO
 	public static final boolean HORIZONTAL=false;
 
 	static MemoryDAO memoryDAO;
-	private HashMap<Long, Player> players;
-	private HashMap<Long, Game> games;
-	private HashMap<Long, PlayerStat> playersStat;
+	private Map<Long, Player> players;
+	private Map<Long, Game> games;
+	private Map<Long, PlayerStat> playersStat;
 //	private HashMap<Long, AI> ais;
 
 	private Statistics stats;
@@ -38,21 +38,21 @@ public class MemoryDAO implements DAO
 		return stats;
 	}
 
-	public HashMap<Long, Player> getPlayersHashMap(){
+	public Map<Long, Player> getPlayersHashMap(){
 		return players;
 	}
 
-	public HashMap<Long, Game> getGamesHashMap(){
+	public Map<Long, Game> getGamesHashMap(){
 		return games;
 	}
 
-	public void setPlayersHashMap(HashMap<Long, Player> players)
+	public void setPlayersHashMap(Map<Long, Player> players)
 	{
 		this.players=null;
 		this.players=players;
 	}
 
-	public void setGamesHashMap(HashMap<Long, Game> games)
+	public void setGamesHashMap(Map<Long, Game> games)
 	{
 		this.games=null;
 		this.games=games;
