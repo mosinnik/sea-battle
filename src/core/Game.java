@@ -1,9 +1,9 @@
 package core;
 
-import DAO.MemoryDAO;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
 import core.characters.Player;
+import dao.MemoryDAO;
 
 import java.io.Serializable;
 

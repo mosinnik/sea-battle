@@ -1,10 +1,10 @@
-package commands.gameCommands;
+package commands.game;
 
-import DAO.MemoryDAO;
 import commands.Command;
 import core.Game;
 import core.Input;
 import core.characters.AI;
+import dao.MemoryDAO;
 
 /**
  * Created by IntelliJ IDEA.

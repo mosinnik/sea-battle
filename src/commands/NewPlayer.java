@@ -1,7 +1,7 @@
 package commands;
 
-import DAO.MemoryDAO;
 import core.Input;
+import dao.MemoryDAO;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,12 +1,12 @@
-package commands.gameCommands;
+package commands.game;
 
-import DAO.MemoryDAO;
 import commands.Command;
 import core.Game;
 import core.Input;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
 import core.characters.Player;
+import dao.MemoryDAO;
 
 /**
  * Created by IntelliJ IDEA.

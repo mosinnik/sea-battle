@@ -30,10 +30,10 @@ public class ContinueGame implements Command
 				switch(k)
 				{
 					case 1:
-						a = Class.forName("commands.continueGameCommands.ContinueHumanVsHumanGame");
+						a = Class.forName("commands.continuegame.ContinueHumanVsHumanGame");
 						break;
 					case 2:
-						a = Class.forName("commands.continueGameCommands.ContinueHumanVsAIGame");
+						a = Class.forName("commands.continuegame.ContinueHumanVsAIGame");
 						break;
 					case 3:
 						return;

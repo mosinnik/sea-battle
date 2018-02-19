@@ -1,9 +1,9 @@
 package core;
 
-import DAO.MemoryDAO;
 import commands.NewPlayer;
 import core.arrays.CoordinateArray;
 import core.characters.Player;
+import dao.MemoryDAO;
 
 import java.util.Scanner;
 import java.util.StringTokenizer;

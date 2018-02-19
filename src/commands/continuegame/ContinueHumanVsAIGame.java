@@ -1,12 +1,13 @@
-package commands.continueGameCommands;
+package commands.continuegame;
 
-import DAO.MemoryDAO;
 import commands.Command;
 import core.Game;
 import core.Input;
 import core.arrays.BooleanArray;
 import core.arrays.CoordinateArray;
+import core.characters.AI;
 import core.characters.Player;
+import dao.MemoryDAO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,16 +16,16 @@ import java.util.Map;
  * Created by IntelliJ IDEA.
  * User: mosinnik
  * Date: 23.07.2010
- * Time: 21:57:35
+ * Time: 21:57:56
  * To change this template use File | Settings | File Templates.
  */
-public class ContinueHumanVsHumanGame implements Command
+public class ContinueHumanVsAIGame implements Command
 {
 	public String helpMessage()
 	{
 		return "\n\n\n\n\n" +
 				"Help.\n" +
-				"You will play with other player. " +
+				"You wil play with AI. " +
 				"For start game you should inter your name. " +
 				"If you aren't register you should do it.";
 	}
@@ -32,29 +33,22 @@ public class ContinueHumanVsHumanGame implements Command
 
 	public void execute()
 	{
-		Player firstPlayer;
-		Player secondPlayer;
-
-		//enter and check players info
-		firstPlayer = Input.askForNewPlayerInfo("First", null, helpMessage());
-		if(firstPlayer == null)
+		//inter and check player info
+		Player player = Input.askForLoadPlayerInfo("Your", null, helpMessage());
+		if(player == null)
 			return;
-		secondPlayer = Input.askForNewPlayerInfo("Second", firstPlayer, helpMessage());
-		if(secondPlayer == null)
-			return;
-
-		System.out.println("\n\n\n");
 
 		Map<Long, Game> games = MemoryDAO.getInstance().getGamesHashMap();
 		Map<Long, Game> checkedGames = new HashMap<Long, Game>();
+		System.out.println("Game id\tMap size\tRound");
 		for(Game g : games.values())
-			if(!g.isSecondPlayerAI() && g.getState())
-				if(g.isPlayersIds(firstPlayer.getId(), secondPlayer.getId()))
+			if(g.isSecondPlayerAI() && g.getState())
+				if(g.getPlayersIds()[0] == player.getId())
 				{
 					checkedGames.put(g.getId(), g);
 					System.out.println("\n=====================================================");
 					System.out.println("Game id:" + g.getId() + "\tMap size:" + g.getMapSize() + "\tRound:" + g.getRound());
-					g.printGame(true, true);
+					g.printGame(true, false);
 				}
 		long gameId = 0;
 		boolean repeat = true;
@@ -71,8 +65,10 @@ public class ContinueHumanVsHumanGame implements Command
 		}
 
 		Game g = MemoryDAO.getInstance().getGame(gameId);
-		g.printGame(true, true);
+		long AIId = g.getPlayersIds()[1];
+		AI ai = (AI)MemoryDAO.getInstance().getPlayer(AIId);
 
+		g.printGame(true, false);
 //game
 		BooleanArray b = null;
 		CoordinateArray coordinates = new CoordinateArray(-1, -1);
@@ -81,54 +77,38 @@ public class ContinueHumanVsHumanGame implements Command
 			if(g.getStep())
 			{
 //get from first player(human) coordinates for fire
-				System.out.print("\n" + firstPlayer.getName());
+				System.out.print("\n" + player.getName());
 				coordinates = Input.inputFireCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{
 					System.out.println("Exit");
+					MemoryDAO.getInstance().setAI(ai);
 					MemoryDAO.getInstance().setGame(g);
 					return;
 				}
-				b = g.fire(coordinates.getI(), coordinates.getK(), firstPlayer);
+				b = g.fire(coordinates.getI(), coordinates.getK(), player);
 				if(!b.isShotSuccessful())
 					g.changeStep();
 				else
-					firstPlayer.addScore(1);
+					player.addScore(1);
 				if(b.isShipDown())
 				{
 					System.out.println("=============== This ship is down! ==============");
-					firstPlayer.addScore(3);
+					player.addScore(3);
 				}
 			}
 			else
-			{
-//get from second player(human) coordinates for fire
-				System.out.print("\n" + secondPlayer.getName());
-				coordinates = Input.inputFireCoordinates(g.getMapSize());
-				if(coordinates.getI() == -1)
-				{
-					System.out.println("Exit");
-					MemoryDAO.getInstance().setGame(g);
-					return;
-				}
-				b = g.fire(coordinates.getI(), coordinates.getK(), secondPlayer);
-				if(!b.isShotSuccessful())
+			{//AI step               
+				if(!ai.nextStep())
 					g.changeStep();
-				else
-					secondPlayer.addScore(1);
-				if(b.isShipDown())
-				{
-					System.out.println("=============== This ship is down! ==============");
-					secondPlayer.addScore(3);
-				}
 			}
-			System.out.print("\n");
-			g.printGame(true, true);
+			System.out.print("\n\n");
+			g.printGame(true, false);
 		}
-		System.out.print("\n\n\n\n\t\tGame over. ");
+		System.out.print("\n\n\n\n\t\tGame over.");
 		if(g.getWin())
-			System.out.println(firstPlayer.getName() + " win!");
+			System.out.println(" You win!");
 		else
-			System.out.println(secondPlayer.getName() + " win!");
+			System.out.println(" AI win!");
 	}
 }

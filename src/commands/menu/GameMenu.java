@@ -32,13 +32,13 @@ public class GameMenu implements Command
 				switch(k)
 				{
 					case 1:
-						a = Class.forName("commands.gameCommands.HumanVsHumanGame");
+						a = Class.forName("commands.game.HumanVsHumanGame");
 						break;
 					case 2:
-						a = Class.forName("commands.gameCommands.HumanVsAIGame");
+						a = Class.forName("commands.game.HumanVsAIGame");
 						break;
 					case 3:
-						a = Class.forName("commands.gameCommands.AIVsAIGame");
+						a = Class.forName("commands.game.AIVsAIGame");
 						break;
 					case 4:
 						return;

@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import core.Game;
 import core.characters.Player;
