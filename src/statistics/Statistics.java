@@ -9,9 +9,13 @@ import java.util.Map;
 
 public class Statistics
 {
+	private Map<Long, PlayerStat> mPlayersStat;
+	private Map<Long, Player> mPlayers;
+	private Map<Long, Game> mGames;
+
 	public Statistics(Map<Long, Game> mGames, Map<Long, Player> mPlayers)
 	{
-		this.mPlayersStat = new HashMap<Long, PlayerStat>();
+		this.mPlayersStat = new HashMap<>();
 		this.mGames = mGames;
 		this.mPlayers = mPlayers;
 	}
@@ -54,8 +58,4 @@ public class Statistics
 			System.out.println(ps.toString());
 		}
 	}
-
-	private Map<Long, PlayerStat> mPlayersStat;
-	private Map<Long, Player> mPlayers;
-	private Map<Long, Game> mGames;
 }
