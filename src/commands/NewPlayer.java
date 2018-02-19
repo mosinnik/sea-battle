@@ -15,30 +15,30 @@ public class NewPlayer implements Command
 	public void execute()
 	{
 		System.out.println("\n\n\n\t\tNewPlayer!!!!");
-		String name=Input.inputName();
+		String name = Input.inputName();
 		if(name.toLowerCase().equals("exit"))
 			return;
-		else if(name.toLowerCase().equals("help") || name.toLowerCase().equals("-h") || name.toLowerCase().equals("/?"))
+
+		if(name.toLowerCase().equals("help") || name.toLowerCase().equals("-h") || name.toLowerCase().equals("/?"))
 		{
 			System.out.println("\nHelp.\nIf you want create new player inter name and if this name not used by other men you can use it else you should inter other name.");
 			execute();
+			return;
 		}
+
+		if(MemoryDAO.getInstance().getPlayerId(name) != -1)
+			System.out.println(name + " is already created.");
 		else
-		{
-			if(MemoryDAO.getInstance().getPlayerId(name)!=-1)
-				System.out.println(name+" is already created.");
-			else
-				newPlayer(name);
-			System.out.print("Do you want add another players to db?");
-			if(Input.yesOrNo())
-				execute();
-		}
+			newPlayer(name);
+		System.out.print("Do you want add another players to db?");
+		if(Input.yesOrNo())
+			execute();
 	}
 
 	public static long newPlayer(String name)
 	{
-		long playerId=MemoryDAO.getInstance().newPlayer(name);
-		System.out.println(name+" created.");
+		long playerId = MemoryDAO.getInstance().newPlayer(name);
+		System.out.println(name + " created.");
 		return playerId;
 	}
 }
