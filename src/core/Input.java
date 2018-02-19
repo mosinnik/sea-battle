@@ -279,10 +279,13 @@ public class Input
 				return MemoryDAO.getInstance().getPlayer(playerId);
 			}
 
-			if(enemyPlayer == null || enemyPlayer.getId() != playerId)
-				break;
+			if(enemyPlayer != null && enemyPlayer.getId() == playerId)
+			{
+				System.out.print("This name already use first player. Enter your name again.");
+				continue;
+			}
 
-			System.out.print("This name already use first player. Enter your name again.");
+			return MemoryDAO.getInstance().getPlayer(playerId);
 		}
 
 		return null;
