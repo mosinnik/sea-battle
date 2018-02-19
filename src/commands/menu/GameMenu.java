@@ -15,10 +15,10 @@ public class GameMenu implements Command
 	public void execute()
 	{
 		System.out.println("\n\n\n\tNewGame!!!!");
-		Class a=null;
+		Class a = null;
 		while(true)
 		{
-			int k=-1;
+			int k = -1;
 			System.out.println("\tGAME MENU");
 			System.out.println("Select type of game:");
 			System.out.println("1. Human vs. Human.");
@@ -28,24 +28,24 @@ public class GameMenu implements Command
 			System.out.println("Choose some way.");
 			try
 			{
-				k=Input.inputSelect();
+				k = Input.inputSelect();
 				switch(k)
 				{
 					case 1:
-						a=Class.forName("commands.gameCommands.HumanVsHumanGame");
+						a = Class.forName("commands.gameCommands.HumanVsHumanGame");
 						break;
 					case 2:
-						a=Class.forName("commands.gameCommands.HumanVsAIGame");
+						a = Class.forName("commands.gameCommands.HumanVsAIGame");
 						break;
 					case 3:
-						a=Class.forName("commands.gameCommands.AIVsAIGame");
+						a = Class.forName("commands.gameCommands.AIVsAIGame");
 						break;
 					case 4:
 						return;
 					default:
-						a=Class.forName("commands.Help");
+						a = Class.forName("commands.Help");
 				}
-				Command q=(Command)a.newInstance();
+				Command q = (Command)a.newInstance();
 				q.execute();
 			}
 			catch(ClassNotFoundException e)

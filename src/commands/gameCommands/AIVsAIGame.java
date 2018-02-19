@@ -15,9 +15,9 @@ import core.characters.AI;
  */
 public class AIVsAIGame implements Command
 {
-	private AI firstAI=null;
-	private AI secondAI=null;
-	private Game g=null;
+	private AI firstAI = null;
+	private AI secondAI = null;
+	private Game g = null;
 	private long firstAIId;
 	private long secondAIId;
 	private long gameId;
@@ -25,25 +25,25 @@ public class AIVsAIGame implements Command
 	public void execute()
 	{
 //input mapSize
-		int mapSize=Input.inputMapSize();
+		int mapSize = Input.inputMapSize();
 
 //start game between AIs
-		firstAIId=MemoryDAO.getInstance().newAI("firstAI", 10);
-		secondAIId=MemoryDAO.getInstance().newAI("secondAI", 10);
-		gameId=MemoryDAO.getInstance().newGame(firstAIId, secondAIId, mapSize);
-		g=MemoryDAO.getInstance().getGame(gameId);
-		firstAI=(AI)MemoryDAO.getInstance().getPlayer(firstAIId);
-		secondAI=(AI)MemoryDAO.getInstance().getPlayer(secondAIId);
+		firstAIId = MemoryDAO.getInstance().newAI("firstAI", 10);
+		secondAIId = MemoryDAO.getInstance().newAI("secondAI", 10);
+		gameId = MemoryDAO.getInstance().newGame(firstAIId, secondAIId, mapSize);
+		g = MemoryDAO.getInstance().getGame(gameId);
+		firstAI = (AI)MemoryDAO.getInstance().getPlayer(firstAIId);
+		secondAI = (AI)MemoryDAO.getInstance().getPlayer(secondAIId);
 		firstAI.setGame(g);
 		secondAI.setGame(g);
-		AIRunnable AIR=new AIRunnable(firstAI, secondAI, g);
-		Thread gameThread=new Thread(AIR);
+		AIRunnable AIR = new AIRunnable(firstAI, secondAI, g);
+		Thread gameThread = new Thread(AIR);
 		gameThread.start();
 
 //wait input some words
 		while(true)
 		{
-			String str=Input.inputLine();
+			String str = Input.inputLine();
 			if(str.toLowerCase().equals("exit") || str.toLowerCase().equals("stop"))
 			{
 				gameThread.interrupt();
@@ -56,7 +56,7 @@ public class AIVsAIGame implements Command
 			else if(str.toLowerCase().equals("help") || str.toLowerCase().equals("-h") || str.toLowerCase().equals("/?"))
 			{
 				gameThread.suspend();
-				System.out.println("\n\n\n\t!!!PAUSE!!!!\n\nHelp.\nYou look for game between AIs. You can stop it and continue if need but you have only 1 second for input.[input 'stop','pause','play']" );
+				System.out.println("\n\n\n\t!!!PAUSE!!!!\n\nHelp.\nYou look for game between AIs. You can stop it and continue if need but you have only 1 second for input.[input 'stop','pause','play']");
 				System.out.println("For continues game write 'play'");
 			}
 			else if(str.toLowerCase().equals("pause"))
@@ -74,21 +74,21 @@ public class AIVsAIGame implements Command
 
 class AIRunnable implements Runnable
 {
-	private AI firstAI=null;
-	private AI secondAI=null;
-	private Game g=null;
+	private AI firstAI = null;
+	private AI secondAI = null;
+	private Game g = null;
 
 
 	public AIRunnable(AI firstAI, AI secondAI, Game g)
 	{
-		this.firstAI=firstAI;
-		this.secondAI=secondAI;
-		this.g=g;
+		this.firstAI = firstAI;
+		this.secondAI = secondAI;
+		this.g = g;
 	}
 
 	public AI[] getAI()
 	{
-		AI[] ais={this.firstAI,this.secondAI};
+		AI[] ais = {this.firstAI, this.secondAI};
 		return ais;
 	}
 

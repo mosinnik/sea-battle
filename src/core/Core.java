@@ -1,8 +1,10 @@
 package core;
 
-public class Core {
+public class Core
+{
 
-	public void startGame(Game g){
+	public void startGame(Game g)
+	{
 		return;
 	}
 }

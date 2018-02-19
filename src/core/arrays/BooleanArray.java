@@ -11,8 +11,8 @@ public class BooleanArray
 {
 	public BooleanArray()
 	{
-		isShotSuccessful=false;
-		isShipDown=false;
+		isShotSuccessful = false;
+		isShipDown = false;
 	}
 
 	public boolean isShotSuccessful()
@@ -22,7 +22,7 @@ public class BooleanArray
 
 	public void shotSuccessful()
 	{
-		isShotSuccessful=true;
+		isShotSuccessful = true;
 	}
 
 	public boolean isShipDown()
@@ -32,7 +32,7 @@ public class BooleanArray
 
 	public void shipDown()
 	{
-		isShipDown=true;
+		isShipDown = true;
 	}
 
 	private boolean isShotSuccessful;

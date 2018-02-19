@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class MemoryDAO implements DAO
 {
-	public static final boolean VERTICAL=true;
-	public static final boolean HORIZONTAL=false;
+	public static final boolean VERTICAL = true;
+	public static final boolean HORIZONTAL = false;
 
 	static MemoryDAO memoryDAO;
 	private Map<Long, Player> players;
@@ -28,8 +28,8 @@ public class MemoryDAO implements DAO
 	 */
 	public void collectStat()
 	{
-		stats=null;
-		stats=new Statistics(games, players);
+		stats = null;
+		stats = new Statistics(games, players);
 		stats.collectStat();
 	}
 
@@ -38,24 +38,26 @@ public class MemoryDAO implements DAO
 		return stats;
 	}
 
-	public Map<Long, Player> getPlayersHashMap(){
+	public Map<Long, Player> getPlayersHashMap()
+	{
 		return players;
 	}
 
-	public Map<Long, Game> getGamesHashMap(){
+	public Map<Long, Game> getGamesHashMap()
+	{
 		return games;
 	}
 
 	public void setPlayersHashMap(Map<Long, Player> players)
 	{
-		this.players=null;
-		this.players=players;
+		this.players = null;
+		this.players = players;
 	}
 
 	public void setGamesHashMap(Map<Long, Game> games)
 	{
-		this.games=null;
-		this.games=games;
+		this.games = null;
+		this.games = games;
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class MemoryDAO implements DAO
 	 */
 	public long newGame(Long firstPlayerId, Long secondPlayerId, int mapSize)
 	{
-		Game g=new Game(firstPlayerId, secondPlayerId, mapSize);
+		Game g = new Game(firstPlayerId, secondPlayerId, mapSize);
 		addGame(g);
 		return g.getId();
 	}
@@ -73,7 +75,8 @@ public class MemoryDAO implements DAO
 		games.put(g.getId(), g);
 	}
 
-	public void setGame(Game g){
+	public void setGame(Game g)
+	{
 		games.put(g.getId(), g);
 	}
 
@@ -84,7 +87,7 @@ public class MemoryDAO implements DAO
 
 	public long getGameId(Long id1, Long id2)
 	{
-		long i=0;
+		long i = 0;
 		for(Game g : games.values())
 			if(g.isPlayersIds(id1, id2))
 				return i;
@@ -103,7 +106,7 @@ public class MemoryDAO implements DAO
 	 */
 	public Long newPlayer(String name)
 	{
-		Player p=new Player(name,false);
+		Player p = new Player(name, false);
 		addPlayer(p);
 		return p.getId();
 	}
@@ -142,7 +145,7 @@ public class MemoryDAO implements DAO
 	 */
 	public long newAI(String name, int difficulty)
 	{
-		AI ai=new AI(name, difficulty);
+		AI ai = new AI(name, difficulty);
 		addPlayer(ai);
 		return ai.getId();
 	}
@@ -180,22 +183,23 @@ public class MemoryDAO implements DAO
 
 	private MemoryDAO()
 	{
-		players=new HashMap<Long, Player>();
-		games=new HashMap<Long, Game>();
+		players = new HashMap<Long, Player>();
+		games = new HashMap<Long, Game>();
 		//ais=new HashMap<Long, AI>();
-		playersStat=new HashMap<Long, PlayerStat>();
+		playersStat = new HashMap<Long, PlayerStat>();
 	}
 
 	public static MemoryDAO getInstance()
 	{
-		if(memoryDAO==null)
+		if(memoryDAO == null)
 		{
-			memoryDAO=new MemoryDAO();
+			memoryDAO = new MemoryDAO();
 		}
 		return memoryDAO;
 	}
 
-	public void clearMemoryDAO(){
+	public void clearMemoryDAO()
+	{
 		players.clear();
 		games.clear();
 		playersStat.clear();

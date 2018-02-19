@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Player implements Serializable
 {
-	public Player(String name,boolean isAI)
+	public Player(String name, boolean isAI)
 	{
-		this.name=name;
-		score=0;
-		id=playerId;
-		this.isAI=isAI;
+		this.name = name;
+		score = 0;
+		id = playerId;
+		this.isAI = isAI;
 		Player.incPlayerId();
 	}
 
@@ -25,7 +25,7 @@ public class Player implements Serializable
 
 	public void addScore(int inc)
 	{
-		score+=inc;
+		score += inc;
 		//System.out.println("addInPlayer:"+name+"  inc:"+inc);
 	}
 
@@ -46,7 +46,7 @@ public class Player implements Serializable
 
 	public void changePassword(String password)
 	{
-		this.password=password;
+		this.password = password;
 	}
 
 	//work with players id

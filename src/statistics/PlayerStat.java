@@ -6,17 +6,17 @@ public class PlayerStat extends Player
 {
 	public PlayerStat(String name)
 	{
-		super(name,false);
-		inGameTime=0;
-		numberWinGame=0;
-		numberLoseGame=0;
-		numberNotFinishGame=0;
-		numberGames=0;
+		super(name, false);
+		inGameTime = 0;
+		numberWinGame = 0;
+		numberLoseGame = 0;
+		numberNotFinishGame = 0;
+		numberGames = 0;
 	}
 
 	public void addGameTime(long time)
 	{
-		inGameTime+=time;
+		inGameTime += time;
 	}
 
 	public void addNumberWinGame()
@@ -59,8 +59,9 @@ public class PlayerStat extends Player
 		return numberNotFinishGame;
 	}
 
-	public String toString(){
-		return getName()+"\t"+getScore()+"\t"+numberGames+"\t"+numberWinGame+"\t"+numberLoseGame+"\t"+inGameTime;
+	public String toString()
+	{
+		return getName() + "\t" + getScore() + "\t" + numberGames + "\t" + numberWinGame + "\t" + numberLoseGame + "\t" + inGameTime;
 	}
 
 	private long inGameTime;

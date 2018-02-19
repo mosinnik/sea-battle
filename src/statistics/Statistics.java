@@ -11,29 +11,29 @@ public class Statistics
 {
 	public Statistics(Map<Long, Game> mGames, Map<Long, Player> mPlayers)
 	{
-		this.mPlayersStat=new HashMap<Long, PlayerStat>();
-		this.mGames=mGames;
-		this.mPlayers=mPlayers;
+		this.mPlayersStat = new HashMap<Long, PlayerStat>();
+		this.mGames = mGames;
+		this.mPlayers = mPlayers;
 	}
 
 	public void collectStat()
 	{
-		long id=0;
+		long id = 0;
 		for(Player p : mPlayers.values())
 		{
 			if(!p.isAI())
 			{
-				PlayerStat ps=new PlayerStat(p.getName());
+				PlayerStat ps = new PlayerStat(p.getName());
 				ps.addScore(p.getScore());
-				id=p.getId();
+				id = p.getId();
 				for(Game g : mGames.values())
 				{
-					if(g.getPlayersIds()[0]==id || g.getPlayersIds()[1]==id)
+					if(g.getPlayersIds()[0] == id || g.getPlayersIds()[1] == id)
 					{
 						ps.addGameTime(g.getTime());
 						ps.addNumberGame();
 						if(!g.getState())
-							if((g.getWin() && g.getPlayersIds()[0]==id) || (!g.getWin() && !(g.getPlayersIds()[0]==id)))
+							if((g.getWin() && g.getPlayersIds()[0] == id) || (!g.getWin() && !(g.getPlayersIds()[0] == id)))
 								ps.addNumberWinGame();
 							else
 								ps.addNumberLoseGame();

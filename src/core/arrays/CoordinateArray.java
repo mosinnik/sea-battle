@@ -16,17 +16,17 @@ public class CoordinateArray
 
 	public CoordinateArray(int i, int k)
 	{
-		this.i=i;
-		this.k=k;
-		onlyIK=true;
+		this.i = i;
+		this.k = k;
+		onlyIK = true;
 	}
 
 	public CoordinateArray(int i, int k, boolean direction)
 	{
-		this.i=i;
-		this.k=k;
-		this.direction=direction;
-		onlyIK=false;
+		this.i = i;
+		this.k = k;
+		this.direction = direction;
+		onlyIK = false;
 	}
 
 	public int getI()
@@ -46,17 +46,17 @@ public class CoordinateArray
 
 	public void setI(int i)
 	{
-		this.i=i;
+		this.i = i;
 	}
 
 	public void setK(int k)
 	{
-		this.k=k;
+		this.k = k;
 	}
 
 	public void setDirection(boolean direction)
 	{
-		this.direction=direction;
+		this.direction = direction;
 	}
 
 	public boolean onlyIK()

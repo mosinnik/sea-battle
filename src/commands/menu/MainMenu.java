@@ -14,11 +14,11 @@ public class MainMenu
 {
 	public static void start()
 	{
-		Class a=null;
-		boolean repeat=true;
+		Class a = null;
+		boolean repeat = true;
 		while(repeat)
 		{
-			int k=-1;
+			int k = -1;
 			System.out.println("\n\n\n\tMAIN MENU");
 			System.out.println("1. Work with DB");
 			System.out.println("2. New player");
@@ -29,39 +29,39 @@ public class MainMenu
 			System.out.println("Choose some way.");
 			try
 			{
-				k=Input.inputSelect();
+				k = Input.inputSelect();
 			}
 			catch(NumberFormatException e)
 			{
 				System.out.println("Incorrect select. Select again.");
-				k=-1;
+				k = -1;
 			}
-			if(k!=-1)
+			if(k != -1)
 				try
 				{
 					switch(k)
 					{
 						case 1:
-							a=Class.forName("commands.menu.DBMenu");
+							a = Class.forName("commands.menu.DBMenu");
 							break;
 						case 2:
-							a=Class.forName("commands.NewPlayer");
+							a = Class.forName("commands.NewPlayer");
 							break;
 						case 3:
-							a=Class.forName("commands.menu.GameMenu");
+							a = Class.forName("commands.menu.GameMenu");
 							break;
 						case 4:
-							a=Class.forName("commands.ContinueGame");
+							a = Class.forName("commands.ContinueGame");
 							break;
 						case 5:
-							a=Class.forName("commands.Help");
+							a = Class.forName("commands.Help");
 							break;
 						case 6:
 							return;
 						default:
-							a=Class.forName("commands.Help");
+							a = Class.forName("commands.Help");
 					}
-					Command q=(Command)a.newInstance();
+					Command q = (Command)a.newInstance();
 					q.execute();
 				}
 				catch(ClassNotFoundException e)

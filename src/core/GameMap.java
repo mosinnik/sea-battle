@@ -9,10 +9,10 @@ public class GameMap implements Serializable
 {
 	GameMap(int mapSize, long playerId)
 	{
-		this.mapSize=mapSize;
-		map=new Ship[mapSize][mapSize];
-		this.playerId=playerId;
-		numbOfDecks=0;
+		this.mapSize = mapSize;
+		map = new Ship[mapSize][mapSize];
+		this.playerId = playerId;
+		numbOfDecks = 0;
 	}
 
 	public int getMapSize()
@@ -20,34 +20,34 @@ public class GameMap implements Serializable
 		return mapSize;
 	}
 
-	public void setShip(CoordinateArray coordinates,int length)
+	public void setShip(CoordinateArray coordinates, int length)
 	{
-		int i=coordinates.getI();
-		int k=coordinates.getK();
+		int i = coordinates.getI();
+		int k = coordinates.getK();
 
-		map[i][k]=new Ship(coordinates, length);
-		int dI=0, dK=0;
+		map[i][k] = new Ship(coordinates, length);
+		int dI = 0, dK = 0;
 		if(!coordinates.getDirection())
-			dK=1;
+			dK = 1;
 		else
-			dI=1;
+			dI = 1;
 
-		for(int ii=1;ii<length;ii++)
-			map[i+dI*ii][k+dK*ii]=map[i][k];
+		for(int ii = 1; ii < length; ii++)
+			map[i + dI * ii][k + dK * ii] = map[i][k];
 
-		numbOfDecks+=length;
+		numbOfDecks += length;
 	}
 
 	public void resetMap()
 	{
-		map=null;
-		map=new Ship[mapSize][mapSize];
-		numbOfDecks=0;
+		map = null;
+		map = new Ship[mapSize][mapSize];
+		numbOfDecks = 0;
 	}
 
 	public void setSea(int i, int k)
 	{
-		map[i][k]=new Ship(true);
+		map[i][k] = new Ship(true);
 	}
 
 	public int destroy(int i, int k)
@@ -57,7 +57,7 @@ public class GameMap implements Serializable
 
 	public Ship getShip(int i, int k)
 	{
-		if(map[i][k]!=null)
+		if(map[i][k] != null)
 			return map[i][k];
 		return null;
 	}
@@ -67,11 +67,13 @@ public class GameMap implements Serializable
 		return playerId;
 	}
 
-	public int getNumbOfDecks(){
+	public int getNumbOfDecks()
+	{
 		return numbOfDecks;
 	}
 
-	public void decNumbOfDecks(){
+	public void decNumbOfDecks()
+	{
 		numbOfDecks--;
 	}
 
