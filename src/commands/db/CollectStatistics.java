@@ -17,6 +17,6 @@ public class CollectStatistics implements Command
 		System.out.println("\n\n\n\tCollectStatistics!!!!");
 		MemoryDAO.getInstance().collectStat();
 		MemoryDAO.getInstance().getStatistics().printStatistics();
-		System.out.println("");
+		System.out.println();
 	}
 }
