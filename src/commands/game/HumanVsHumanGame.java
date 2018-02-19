@@ -59,7 +59,7 @@ public class HumanVsHumanGame implements Command
 			for(int x = n; x >= length; x--)
 			{
 				System.out.println("\n" + firstPlayer.getName() + " input " + (n - length + 1) + " ship(s) with length=" + length);
-				coordinates = Input.inputShipCoordinates(g.getMapSize(), g.getCountShip());
+				coordinates = Input.inputShipCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{   //if -1 then exit
 					System.out.println("in coord[2]: " + coordinates.getK() + " EXIT");
@@ -94,7 +94,7 @@ public class HumanVsHumanGame implements Command
 			for(int x = n; x >= length; x--)
 			{
 				System.out.println("\n" + secondPlayer.getName() + " input " + (n - length + 1) + " ship(s) with length=" + length);
-				coordinates = Input.inputShipCoordinates(g.getMapSize(), g.getCountShip());
+				coordinates = Input.inputShipCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{   //if -1 then exit
 					System.out.println("EXIT");

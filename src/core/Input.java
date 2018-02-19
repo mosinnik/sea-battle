@@ -15,6 +15,22 @@ public class Input
 	final static String YES_OR_NO = "Yes or no?[y/n]";
 	final static String INPUT_NAME = "Input name";
 
+
+	private static int nextInt(StringTokenizer strTok, int mapSize)
+	{
+		if(!strTok.hasMoreTokens())
+			return -1;
+
+		int i = Integer.parseInt(strTok.nextToken());
+		if(!(i >= 0 && i < mapSize))
+		{
+			System.out.println("Coordinate outside of range [0;" + (mapSize - 1) + "]. Repeat input.");
+			return -1;
+		}
+
+		return i;
+	}
+
 	public static CoordinateArray inputFireCoordinates(int mapSize)
 	{
 		CoordinateArray coordinates = new CoordinateArray(-1, -1);
@@ -24,54 +40,44 @@ public class Input
 
 		StringTokenizer strTok = new StringTokenizer(st, " ,.");
 
-		if(strTok.countTokens() != 2)
+		final int countTokens = strTok.countTokens();
+		if(countTokens == 0)
 		{
-			if(strTok.hasMoreTokens() && strTok.nextToken().toLowerCase().equals("exit"))
+			System.out.println("Need input 2 coordinates. Repeat input.");
+			return inputFireCoordinates(mapSize);
+		}
+
+		if(countTokens == 1)
+		{
+			String command = strTok.nextToken();
+			if(isExitCommand(command))
 				return coordinates;
-			else
-			{
-				System.out.println("Need input 2 coordinates. Repeat input.");
-				return inputFireCoordinates(mapSize);
-			}
+
+			System.out.println("Need input 2 coordinates. Repeat input.");
+			return inputFireCoordinates(mapSize);
 		}
-		else
+
+		try
 		{
-//check first coordinate [i]
-			try
-			{
-				if(strTok.hasMoreTokens())
-				{
-					int i = Integer.parseInt(strTok.nextToken());
-					if(!(i >= 0 && i < mapSize))
-					{
-						System.out.println("First coordinate outside of range [0;" + (mapSize - 1) + "]. Repeat input.");
-						return inputFireCoordinates(mapSize);
-					}
-					coordinates.setI(i);
-				}
-//check second coordinate [k]
-				if(strTok.hasMoreTokens())
-				{
-					int k = Integer.parseInt(strTok.nextToken());
-					if(!(k >= 0 && k < mapSize))
-					{
-						System.out.println("Second coordinate outside of range [0;" + (mapSize - 1) + "]. Repeat input.");
-						return inputFireCoordinates(mapSize);
-					}
-					coordinates.setK(k);
-				}
-			}
-			catch(NumberFormatException e)
-			{
-				System.out.println("Incorrect input data. Repeat input.");
+			coordinates.setI(nextInt(strTok, mapSize));
+			if(coordinates.getI() < 0)
 				return inputFireCoordinates(mapSize);
-			}
+
+			coordinates.setK(nextInt(strTok, mapSize));
+			if(coordinates.getK() < 0)
+				return inputFireCoordinates(mapSize);
 		}
+		catch(NumberFormatException e)
+		{
+			System.out.println("Incorrect input data. Repeat input.");
+			return inputFireCoordinates(mapSize);
+		}
+
 		System.out.println(coordinates.getI() + "  " + coordinates.getK());
 		return coordinates;
 	}
 
-	public static CoordinateArray inputShipCoordinates(int mapSize, int maxLength)
+	public static CoordinateArray inputShipCoordinates(int mapSize)
 	{
 		CoordinateArray coordinates = new CoordinateArray(-1, -1, false);
 		System.out.println("Input line[0;" + mapSize + "],column[0;" + mapSize + "] and direction[h/v] for ship.");
@@ -80,49 +86,40 @@ public class Input
 
 		StringTokenizer strTok = new StringTokenizer(st, " ,");
 		//System.out.println("strTok.countTokens()="+strTok.countTokens());
-		if(strTok.countTokens() != 3)
+		final int countTokens = strTok.countTokens();
+		if(countTokens == 0)
 		{
-			if(strTok.hasMoreTokens())
-			{
-				st = strTok.nextToken().toLowerCase();
-				if(isExitCommand(st))
-				{
-					return coordinates;
-				}
-				if(isHelpCommand(st))
-				{
-					coordinates.setI(-2);
-					return coordinates;
-				}
-			}
 			System.out.println("Need input 3 coordinates. Repeat input.");
-			return inputShipCoordinates(mapSize, maxLength);
+			return inputShipCoordinates(mapSize);
 		}
-//check first coordinate [i]
+
+		if(countTokens == 1)
+		{
+			String command = strTok.nextToken();
+			if(isExitCommand(command))
+				return coordinates;
+
+			if(isHelpCommand(st))
+			{
+				coordinates.setI(-2);
+				return coordinates;
+			}
+
+			System.out.println("Need input 3 coordinates. Repeat input.");
+			return inputShipCoordinates(mapSize);
+		}
+
 		try
 		{
-			if(strTok.hasMoreTokens())
-			{
-				int i = Integer.parseInt(strTok.nextToken());
-				if(!(i >= 0 && i < mapSize))
-				{
-					System.out.println("First coordinate outside of range [0;" + (mapSize - 1) + "]. Repeat input.");
-					return inputShipCoordinates(mapSize, maxLength);
-				}
-				coordinates.setI(i);
-			}
-//check second coordinate [k]
-			if(strTok.hasMoreTokens())
-			{
-				int k = Integer.parseInt(strTok.nextToken());
-				if(!(k >= 0 && k < mapSize))
-				{
-					System.out.println("Second coordinate outside of range [0;" + (mapSize - 1) + "]. Repeat input.");
-					return inputShipCoordinates(mapSize, maxLength);
-				}
-				coordinates.setK(k);
-			}
-//check direction
+			coordinates.setI(nextInt(strTok, mapSize));
+			if(coordinates.getI() < 0)
+				return inputShipCoordinates(mapSize);
+
+			coordinates.setK(nextInt(strTok, mapSize));
+			if(coordinates.getK() < 0)
+				return inputShipCoordinates(mapSize);
+
+			//check direction
 			if(strTok.hasMoreTokens())
 			{
 				st = strTok.nextToken();
@@ -136,14 +133,14 @@ public class Input
 						break;
 					default:
 						System.out.println("Direction should be 'h' or 'v'. Repeat input.");
-						return inputShipCoordinates(mapSize, maxLength);
+						return inputShipCoordinates(mapSize);
 				}
 			}
 		}
 		catch(NumberFormatException e)
 		{
 			System.out.println("Incorrect input data. Repeat input.");
-			return inputShipCoordinates(mapSize, maxLength);
+			return inputShipCoordinates(mapSize);
 		}
 
 		System.out.println(coordinates.getI() + "  " + coordinates.getK() + "  " + coordinates.getDirection());

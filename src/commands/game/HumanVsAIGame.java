@@ -54,7 +54,7 @@ public class HumanVsAIGame implements Command
 			for(int x = n; x >= length; x--)
 			{
 				System.out.println("Input " + (n - length + 1) + " ship(s) with length=" + length);
-				coordinates = Input.inputShipCoordinates(g.getMapSize(), g.getCountShip());
+				coordinates = Input.inputShipCoordinates(g.getMapSize());
 				if(coordinates.getI() == -1)
 				{   //if -1 then exit
 					System.out.println("EXIT");
