@@ -120,7 +120,13 @@ public class HumanVsAIGame implements Command
 		System.out.print("\n\n\n\n\t\tGame over.");
 
 		if(g.getWinner().isAI())
+		{
+			System.out.println();
 			System.out.println(" AI win!");
+			System.out.println();
+			System.out.println("AI map:");
+			g.printGame(false, true);
+		}
 		else
 			System.out.println(" You win!");
 	}
