@@ -64,15 +64,7 @@ public class DBMenu implements Command
 					Command q = (Command)a.newInstance();
 					q.execute();
 				}
-				catch(ClassNotFoundException e)
-				{
-					e.printStackTrace();
-				}
-				catch(InstantiationException e)
-				{
-					e.printStackTrace();
-				}
-				catch(IllegalAccessException e)
+				catch(ClassNotFoundException | InstantiationException | IllegalAccessException e)
 				{
 					e.printStackTrace();
 				}
