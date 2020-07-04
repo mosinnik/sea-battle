@@ -257,7 +257,7 @@ public class Input
 			System.out.println();
 			System.out.println();
 			System.out.println();
-			System.out.println("Enter " + title + " name:");
+			System.out.println("Введи " + title + " имя:");
 			String playerName = inputName();
 			if(isExitCommand(playerName))
 				break;
